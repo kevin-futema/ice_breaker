@@ -8,7 +8,8 @@ from third_parties.linkedin import scrape_linkedin_profile
 from agents.linkedin_lookup_agent import lookup as linkedin_lookup_agent
 from output_parsers import summary_parser, Summary
 
-def ice_break_with(name: str, mock = True) -> Tuple[Summary, str]:
+
+def ice_break_with(name: str, mock=True) -> Tuple[Summary, str]:
     linkedin_url = linkedin_lookup_agent(name=name)
     linkedin_data = scrape_linkedin_profile(linkedin_url=linkedin_url, mock=mock)
 
@@ -21,8 +22,11 @@ def ice_break_with(name: str, mock = True) -> Tuple[Summary, str]:
     """
 
     summary_prompt_template = PromptTemplate(
-        input_variables=["information"], template=summary_template,
-        partial_variables={"format_instructions":summary_parser.get_format_instructions()}
+        input_variables=["information"],
+        template=summary_template,
+        partial_variables={
+            "format_instructions": summary_parser.get_format_instructions()
+        },
     )
 
     llm = ChatOpenAI(temperature=0, name="gpt-4o-2024-08-06")
@@ -34,7 +38,8 @@ def ice_break_with(name: str, mock = True) -> Tuple[Summary, str]:
     print(linkedin_data.get("profile_pic_url"))
     return res, linkedin_data.get("profile_pic_url")
 
+
 if __name__ == "__main__":
     load_dotenv()
     print("Initializing Ice Breaker")
-    ice_break_with("Kevin Futema Itau", mock = False)
+    ice_break_with("Kevin Futema Itau", mock=False)
